@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  db:
+    image: postgres:12
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile.db
+    container_name: postgres12
+    restart: unless-stopped
+    mem_limit: 1024m
+    mem_reservation: 128m
+    environment:
+      - POSTGRES_DB=fastapi
+      - POSTGRES_PASSWORD=fastapi
+      - POSTGRES_USER=fastapi
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5430:5432
+    volumes:
+      - ${PWD}/pg_data:/var/lib/postgresql/data/pgdata
+    networks:
+      - fastapi-net
+
+networks:
+  fastapi-net:
+    driver: bridge

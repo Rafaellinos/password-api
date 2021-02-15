@@ -79,21 +79,21 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@user_route.get("/users/me/", response_model=User)
+@user_route.get("/users/me", response_model=User)
 async def read_users_me(
         current_user: UserModel = Depends(get_current_active_user),
 ):
     return {"username": current_user.username, "is_active": current_user.is_active}
 
 
-@user_route.post("/users/", response_model=User)
+@user_route.post("/users", response_model=User)
 async def create_user_(
     user: UserIn, db: Session = Depends(get_db),
 ):
     return create_user(db=db, user=user)
 
 
-@user_route.patch("/user/")
+@user_route.patch("/users")
 async def update_password_(
         db: Session = Depends(get_db),
         current_user: UserModel = Depends(get_current_active_user),

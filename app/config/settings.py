@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     HOST = '0.0.0.0'
     PORT = 8000
     BASE_URL = '{}:{}'.format(HOST, str(PORT))
+    ALLOWED_HOSTS: str = ""
 
     class Config:
         case_sensitive: bool = True

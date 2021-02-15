@@ -1,10 +1,13 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Enum
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Enum
 from sqlalchemy.dialects.postgresql import UUID
-from datetime import datetime
 from sqlalchemy.orm import relationship
-from .database import Base
 import enum
 import uuid
+from typing import Optional
+from datetime import datetime
+from pydantic import BaseModel
+
+from db.database import Base
 
 
 class PasswordRequestsStatus(enum.Enum):
@@ -12,18 +15,7 @@ class PasswordRequestsStatus(enum.Enum):
     expired = 2
 
 
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True)
-    public_id = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True)
-    username = Column(String, unique=True)
-    password = Column(String)
-    is_active = Column(Boolean, default=True)
-    password_requests_ids = relationship("PasswordRequests")
-
-
-class PasswordRequests(Base):
+class PasswordRequestsModel(Base):
     __tablename__ = "password_requests"
 
     id = Column(Integer, primary_key=True)
@@ -33,13 +25,28 @@ class PasswordRequests(Base):
     due_date = Column(DateTime)
     view_counter = Column(Integer, default=0)
     status = Column(Enum(PasswordRequestsStatus), default=PasswordRequestsStatus.valid)
-    password_id = relationship("Password", uselist=False, back_populates="password_parent")
+    password_id = relationship("PasswordModel", uselist=False, back_populates="password_parent")
 
 
-class Password(Base):
+class PasswordModel(Base):
     __tablename__ = "password"
 
     id = Column(Integer, primary_key=True)
     password = Column(String)
     password_requests_id = Column(Integer, ForeignKey('password_requests.id'))
-    password_parent = relationship("PasswordRequests", back_populates="password_id")
+    password_parent = relationship("PasswordRequestsModel", back_populates="password_id")
+
+
+class PasswordRequestsIn(BaseModel):
+    user_id: int
+    due_date: Optional[datetime] = None
+    view_counter: int
+    status: Optional[enum.Enum] = None
+
+
+class PasswordRequestsOut(BaseModel):
+    public_id: str
+    due_date: Optional[datetime] = None
+    view_counter: int
+    status: Optional[enum.Enum] = None
+

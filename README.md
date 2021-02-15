@@ -33,12 +33,12 @@ visualização das requisições.</p>
 
 ```console
 foo@bar:~$ sudo apt install httpie
-foo@bar:~$ http POST :8000/api/users/ username=testeuser1 password=testeuser@123 
+foo@bar:~$ http POST :8000/api/users username=testeuser1 password=testeuser@123 
 # cria usuário
 foo@bar:~$ access_token=$(http -f POST :8000/api/login username=testeuser1 password=testeuser@123 | cut -c 18-148) 
 # obter token
 foo@bar:~$ echo $access_token
-foo@bar:~$ http GET :8000/api/users/me/ Authorization:" Bearer $(echo $access_token) 
+foo@bar:~$ http GET :8000/api/users/me Authorization:" Bearer $(echo $access_token) 
 # obter informações do usuário
 foo@bar:~$ http GET :8000/api/request_password Authorization:" Bearer $(echo $access_token)" views_limit==3 expire_in_days==3
 # solicitar senha, use o id para obter a senha

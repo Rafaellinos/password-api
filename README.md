@@ -20,6 +20,7 @@ previsíveis.</p>
 ### Como rodar?
 
 <p>Primeiramente, instalar docker e docker compose, depois subir os containers com o comando: </p>
+
 ```console
 foo@bar:~$ docker-compose up -d
 ```
@@ -29,6 +30,7 @@ obter o access token em POST:/api/login</p>
 <p>Os endpoints de requests ficam disponíveis os acessos as solicitações de senhas e 
 visualização das requisições.</p>
 <p>EX:</p>
+
 ```console
 foo@bar:~$ sudo apt install httpie
 foo@bar:~$ http POST :8000/api/users/ username=testeuser1 password=testeuser@123 

@@ -1,12 +1,18 @@
-from fastapi import Depends, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter, Body
 from jose import JWTError, jwt
 from datetime import timedelta
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from config.settings import get_settings
-from models.users import User, Token, UserModel, UserIn
 from db.database import get_db
+from models.users import (
+    User,
+    Token,
+    UserModel,
+    UserIn,
+    UserPassword,
+)
 from services.users import (
     get_user,
     authenticate_user,
@@ -89,12 +95,12 @@ async def create_user_(
 
 @user_route.patch("/user/")
 async def update_password_(
-        password: str,
         db: Session = Depends(get_db),
         current_user: UserModel = Depends(get_current_active_user),
+        new_password: UserPassword = Body(..., embed=True),
 ):
     return update_password(
         db,
         current_user.id,
-        password,
+        new_password,
     )

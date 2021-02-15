@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import uuid
 
 from db.database import Base
@@ -30,13 +30,17 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
-    username: str
+    username: str = Field(..., min_length=10)
     is_active: Optional[bool] = None
 
 
 class UserIn(User):
-    password: str
+    password: str = Field(..., min_length=5)
 
 
 class UserOut(User):
     public_id: str
+
+
+class UserPassword(BaseModel):
+    password: str = Field(..., description="Your new password", min_length=5)

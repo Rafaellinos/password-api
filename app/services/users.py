@@ -7,7 +7,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from services.errors import NotFound
-from models.users import UserModel, UserIn
+from models.users import UserModel, UserIn, UserPassword
 from config.settings import get_settings
 
 
@@ -68,12 +68,12 @@ def create_user(db: Session, user: UserIn) -> dict:
     }
 
 
-def update_password(db: Session, user_id: int, password: str) -> dict:
+def update_password(db: Session, user_id: int, new_password: UserPassword) -> dict:
     user = db.query(UserModel).filter(
         UserModel.id == user_id and \
         UserModel.is_active
     ).first()
-    user.password = get_password_hash(password)
+    user.password = get_password_hash(new_password.password)
     db.commit()
     return {
         "message": "password updated",

@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     REGISTRATION_TOKEN_LIFETIME = 60 * 60 * 24 * 7  # one week
     TOKEN_ALGORITHM = 'HS256'
     API_PREFIX = '/api'
-    HOST = 'localhost'
+    HOST = '0.0.0.0'
     PORT = 8000
     BASE_URL = '{}:{}'.format(HOST, str(PORT))
 

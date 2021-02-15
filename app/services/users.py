@@ -57,11 +57,14 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 def create_user(db: Session, user: UserIn) -> dict:
-    db_user = UserModel(username=user.username, password=get_password_hash(user.password))
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    logger.info("user created %s" % db_user.public_id)
+    try:
+        db_user = UserModel(username=user.username, password=get_password_hash(user.password))
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        logger.info("user created %s" % db_user.public_id)
+    except Exception as e:
+        logger.error(str(e))
     return {
         "username": db_user.username,
         "is_active": db_user.is_active,

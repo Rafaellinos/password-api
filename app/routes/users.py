@@ -12,6 +12,7 @@ from services.users import (
     authenticate_user,
     create_access_token,
     create_user,
+    update_password,
 )
 
 
@@ -80,8 +81,20 @@ async def read_users_me(
 
 
 @user_route.post("/users/", response_model=User)
-def create_user_(
+async def create_user_(
     user: UserIn, db: Session = Depends(get_db),
 ):
-
     return create_user(db=db, user=user)
+
+
+@user_route.patch("/user/")
+async def update_password_(
+        password: str,
+        db: Session = Depends(get_db),
+        current_user: UserModel = Depends(get_current_active_user),
+):
+    return update_password(
+        db,
+        current_user.id,
+        password,
+    )

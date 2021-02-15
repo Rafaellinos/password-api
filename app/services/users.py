@@ -1,5 +1,6 @@
 import logging
 from passlib.context import CryptContext
+from passlib.exc import UnknownHashError
 from jose import jwt
 from datetime import datetime, timedelta
 from typing import Optional
@@ -35,7 +36,11 @@ def authenticate_user(db, username: str, password: str):
     user = get_user(db, username)
     if not user:
         return False
-    if not verify_password(password, user.password):
+    try:
+        if not verify_password(password, user.password):
+            return False
+    except UnknownHashError as err:
+        logger.error(str(err))
         return False
     return user
 
@@ -51,7 +56,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def create_user(db: Session, user: UserIn):
+def create_user(db: Session, user: UserIn) -> dict:
     db_user = UserModel(username=user.username, password=get_password_hash(user.password))
     db.add(db_user)
     db.commit()
@@ -60,4 +65,16 @@ def create_user(db: Session, user: UserIn):
     return {
         "username": db_user.username,
         "is_active": db_user.is_active,
+    }
+
+
+def update_password(db: Session, user_id: int, password: str) -> dict:
+    user = db.query(UserModel).filter(
+        UserModel.id == user_id and \
+        UserModel.is_active
+    ).first()
+    user.password = get_password_hash(password)
+    db.commit()
+    return {
+        "message": "password updated",
     }

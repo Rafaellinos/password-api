@@ -6,9 +6,9 @@ from datetime import datetime, timedelta
 from typing import Optional
 from sqlalchemy.orm import Session
 
-from services.errors import NotFound
-from models.users import UserModel, UserIn, UserPassword
-from config.settings import get_settings
+from app.services.errors import NotFound
+from app.models.users import UserModel, UserIn, UserPassword
+from app.config.settings import get_settings
 
 
 logger = logging.getLogger("uvicorn.error")

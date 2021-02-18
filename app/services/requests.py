@@ -5,8 +5,8 @@ from datetime import datetime
 from typing import List
 from sqlalchemy.orm import Session
 
-from services.errors import NotFound
-from models.requests import (
+from app.services.errors import NotFound
+from app.models.requests import (
     PasswordModel,
     PasswordRequestsIn,
     PasswordRequestsModel,

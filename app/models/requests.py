@@ -7,7 +7,7 @@ from typing import Optional
 from datetime import datetime
 from pydantic import BaseModel
 
-from db.database import Base
+from app.db.database import Base
 
 
 class PasswordRequestsStatus(enum.Enum):

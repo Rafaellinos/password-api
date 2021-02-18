@@ -4,16 +4,16 @@ from datetime import timedelta
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from config.settings import get_settings
-from db.database import get_db
-from models.users import (
+from app.config.settings import get_settings
+from app.db.database import get_db
+from app.models.users import (
     User,
     Token,
     UserModel,
     UserIn,
     UserPassword,
 )
-from services.users import (
+from app.services.users import (
     get_user,
     authenticate_user,
     create_access_token,

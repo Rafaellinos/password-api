@@ -4,10 +4,10 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from .users import get_current_active_user
-from db.database import get_db
-from models.users import UserModel
-from models.requests import PasswordRequestsIn, PasswordRequestsOut
-from services.requests import (
+from app.db.database import get_db
+from app.models.users import UserModel
+from app.models.requests import PasswordRequestsIn, PasswordRequestsOut
+from app.services.requests import (
     create_password,
     get_requests,
     get_request,

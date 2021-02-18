@@ -5,8 +5,8 @@ from typing import Optional
 from pydantic import BaseModel, Field
 import uuid
 
-from db.database import Base
-from models.requests import PasswordRequestsModel
+from app.db.database import Base
+from app.models.requests import PasswordRequestsModel
 
 
 class UserModel(Base):

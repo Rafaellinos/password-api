@@ -1,35 +1,30 @@
 from fastapi import FastAPI
-import uvicorn
-
-from routes.routes import router
-from config.settings import get_settings
 from starlette.middleware.cors import CORSMiddleware
 
+from app.routes.routes import router
+from app.config.settings import get_settings
 
-settings = get_settings()
-app = FastAPI(
-    title=settings.APP_NAME,
-    debug=settings.DEBUG,
-)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.ALLOWED_HOSTS or ["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.include_router(
-    router,
-    prefix=settings.API_PREFIX,
-)
-
-if __name__ == '__main__':
-    uvicorn.run(
-        app,
-        host=settings.HOST,
-        port=settings.PORT,
+def get_application() -> FastAPI:
+    settings = get_settings()
+    application = FastAPI(
+        title=settings.APP_NAME,
         debug=settings.DEBUG,
     )
 
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.ALLOWED_HOSTS or ["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    application.include_router(
+        router,
+        prefix=settings.API_PREFIX,
+    )
+    return application
+
+
+app = get_application()

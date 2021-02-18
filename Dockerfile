@@ -1,14 +1,19 @@
 FROM python:3.8
 
-RUN apt-get install libpq-dev
+ENV PYTHONUNBUFFERED 1
 
-COPY ./app /app
-COPY requirements.txt /tmp
-COPY ./alembic.ini /
-COPY ./entrypoint.sh /
-
-RUN pip3 install -r /tmp/requirements.txt
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    netcat \
+    libpq-dev && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /app
+
+COPY . ./
+
+RUN pip3 install -r requirements.txt
+
+RUN mv ./entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]

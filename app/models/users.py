@@ -30,7 +30,7 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
-    username: str = Field(..., min_length=10)
+    username: str = Field(..., min_length=4)
     is_active: Optional[bool] = None
 
 

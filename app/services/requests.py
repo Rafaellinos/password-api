@@ -45,7 +45,7 @@ def get_requests(user: int, db: Session) -> List[dict]:
     results = db.query(PasswordRequestsModel).filter(PasswordRequestsModel.user_id == user).all()
     return [
         {
-            "public_id": getattr(r.public_id, "hex", ""),
+            "public_id": str(r.public_id),
             "due_date": r.due_date,
             "view_counter": r.view_counter,
             "status": r.status,
@@ -63,7 +63,7 @@ def get_request(user: int, db: Session, public_id: str) -> dict:
         logger.error("request not found %s" % public_id)
         raise NotFound
     return {
-        "public_id": getattr(result.public_id, "hex", ""),
+        "public_id": str(result.public_id),
         "due_date": result.due_date,
         "view_counter": result.view_counter,
         "status": result.status,
@@ -81,8 +81,9 @@ def request_password(user: int, db: Session, public_id: str) -> dict:
         raise NotFound
 
     if not result.view_counter or datetime.now() > result.due_date:
-        result.status = PasswordRequestsStatus.expired
-        db.commit()
+        if result.status != PasswordRequestsStatus.expired:
+            result.status = PasswordRequestsStatus.expired
+            db.commit()
 
     if result.status == PasswordRequestsStatus.expired:
         if result.password_id:

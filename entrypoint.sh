@@ -7,4 +7,4 @@ echo "Running migrations"
 alembic -c /app/alembic.ini upgrade head
 
 echo "Starting server"
-python /app/run_unicorn.py
+python /app/run_uvicorn.py
